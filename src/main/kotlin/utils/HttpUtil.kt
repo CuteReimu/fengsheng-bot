@@ -1,10 +1,7 @@
 package com.fengsheng.bot.utils
 
 import com.fengsheng.bot.storage.FengshengConfig
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.time.Duration
@@ -28,6 +25,20 @@ object HttpUtil {
         val result = get("${FengshengConfig.fengshengUrl}/resetpwd?name=$name")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+    }
+
+    fun forbidRole(name: String): Boolean {
+        val result = get("${FengshengConfig.fengshengUrl}/forbidrole?name=$name")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.boolean
+    }
+
+    fun releaseRole(name: String): Boolean {
+        val result = get("${FengshengConfig.fengshengUrl}/releaserole?name=$name")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.boolean
     }
 
     private const val ua =
