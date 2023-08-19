@@ -9,7 +9,7 @@ import net.mamoe.mirai.message.data.PlainText
 object GetScore : CommandHandler {
     override val name = "查询"
 
-    override fun showTips(groupCode: Long, senderId: Long) = "查询"
+    override fun showTips(groupCode: Long, senderId: Long) = "查询 名字"
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
