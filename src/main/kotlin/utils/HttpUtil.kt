@@ -41,6 +41,12 @@ object HttpUtil {
         return jsonObject["result"]!!.jsonPrimitive.boolean
     }
 
+    fun setVersion(version: Int) {
+        val result = get("${FengshengConfig.fengshengUrl}/setversion?version=$version")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+    }
+
     private const val ua =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.69"
     private val client =
