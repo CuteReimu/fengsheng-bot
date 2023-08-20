@@ -10,7 +10,7 @@ import net.mamoe.mirai.message.data.PlainText
 object ForbidRole : CommandHandler {
     override val name = "禁用角色"
 
-    override fun showTips(groupCode: Long, senderId: Long) = "禁用角色"
+    override fun showTips(groupCode: Long, senderId: Long) = "禁用角色 名字"
 
     override fun checkAuth(groupCode: Long, senderId: Long) = PermData.isAdmin(senderId)
 

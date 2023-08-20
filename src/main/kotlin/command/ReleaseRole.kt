@@ -10,7 +10,7 @@ import net.mamoe.mirai.message.data.PlainText
 object ReleaseRole : CommandHandler {
     override val name = "启用角色"
 
-    override fun showTips(groupCode: Long, senderId: Long) = "启用角色"
+    override fun showTips(groupCode: Long, senderId: Long) = "启用角色 名字"
 
     override fun checkAuth(groupCode: Long, senderId: Long) = PermData.isAdmin(senderId)
 

@@ -11,7 +11,7 @@ import net.mamoe.mirai.message.data.PlainText
 object ListAllAdmin : CommandHandler {
     override val name = "查看管理员"
 
-    override fun showTips(groupCode: Long, senderId: Long) = ""
+    override fun showTips(groupCode: Long, senderId: Long) = null
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
