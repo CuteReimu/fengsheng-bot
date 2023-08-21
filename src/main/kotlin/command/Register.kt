@@ -10,7 +10,9 @@ import net.mamoe.mirai.message.data.PlainText
 object Register : CommandHandler {
     override val name = "注册"
 
-    override fun showTips(groupCode: Long, senderId: Long) = "注册 名字"
+    override fun showTips(groupCode: Long, senderId: Long) =
+        if (!PermData.playerMap.containsKey(senderId)) "注册 名字"
+        else null
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
