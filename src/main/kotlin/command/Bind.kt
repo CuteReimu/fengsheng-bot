@@ -3,11 +3,18 @@ package com.fengsheng.bot.command
 import com.fengsheng.bot.CommandHandler
 import com.fengsheng.bot.storage.PermData
 import com.fengsheng.bot.utils.HttpUtil
+import net.mamoe.mirai.contact.nameCardOrNick
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
 
 object Bind : CommandHandler {
+    private var reverseMap = mapOf<String, Long>()
+
+    fun load() {
+        reverseMap = PermData.playerMap.map { (k, v) -> v to k }.toMap()
+    }
+
     override val name = "绑定"
 
     override fun showTips(groupCode: Long, senderId: Long) =
@@ -31,9 +38,15 @@ object Bind : CommandHandler {
         }
         if (name.isEmpty()) return PlainText("命令格式：\n绑定 名字")
         if (PermData.playerMap.containsKey(id)) return PlainText("不能重复绑定")
+        val oldId = reverseMap[name]
+        if (oldId != null)
+            return PlainText("该玩家已被$oldId(${msg.group[oldId]?.nameCardOrNick})绑定")
         val result = HttpUtil.getScore(name)
         if (result.endsWith("已身死道消")) return PlainText("不存在的玩家")
-        synchronized(PermData) { PermData.playerMap += id to name }
+        synchronized(PermData) {
+            PermData.playerMap += id to name
+            reverseMap += name to id
+        }
         return PlainText("绑定成功")
     }
 }
