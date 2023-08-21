@@ -26,4 +26,7 @@ object PermData : AutoSavePluginData("PermData") {
             return true
         }
     }
+
+    @ValueDescription("注册状态")
+    var playerMap: Map<Long, String> by value(mapOf())
 }

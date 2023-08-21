@@ -38,8 +38,8 @@ interface CommandHandler {
             ShowTips,
             AddAdmin, RemoveAdmin, ListAllAdmin,
             RandDice, Roll,
-            GetScore, RankList, ResetPwd,
-            ForbidRole, ReleaseRole, SetVersion,
+            GetScore, GetMyScore, RankList, ResetPwd, Bind, Unbind, Register,
+            ForbidRole, ReleaseRole, SetVersion, SetNotice,
         )
 
         suspend fun handle(e: GroupMessageEvent) {

@@ -21,10 +21,11 @@ object HttpUtil {
         return jsonObject["result"]!!.jsonPrimitive.content
     }
 
-    fun resetPwd(name: String) {
+    fun resetPwd(name: String): String {
         val result = get("${FengshengConfig.fengshengUrl}/resetpwd?name=$name")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.content
     }
 
     fun forbidRole(name: String): Boolean {
@@ -45,6 +46,19 @@ object HttpUtil {
         val result = get("${FengshengConfig.fengshengUrl}/setversion?version=$version")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+    }
+
+    fun setNotice(notice: String) {
+        val result = get("${FengshengConfig.fengshengUrl}/setnotice?notice=$notice")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+    }
+
+    fun register(name: String): Boolean {
+        val result = get("${FengshengConfig.fengshengUrl}/register?name=$name")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.boolean
     }
 
     private const val ua =
