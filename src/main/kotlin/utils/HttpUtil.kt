@@ -4,6 +4,7 @@ import com.fengsheng.bot.storage.FengshengConfig
 import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.InputStream
 import java.time.Duration
 
 object HttpUtil {
@@ -59,6 +60,17 @@ object HttpUtil {
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
         return jsonObject["result"]!!.jsonPrimitive.boolean
+    }
+
+    fun getPic(url: String): InputStream {
+        val request = Request.Builder().url(url)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header("user-agent", ua)
+            .get().build()
+        val resp = client.newCall(request).execute()
+        if (resp.code != 200)
+            throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
+        return resp.body!!.byteStream()
     }
 
     private const val ua =

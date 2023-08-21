@@ -26,8 +26,10 @@ internal object PluginMain : KotlinPlugin(
         FengshengConfig.reload()
         PermData.reload()
         PermData.initReverseMap()
+        Dictionary.removeTimeoutImages()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         initHandler(GroupMessageEvent::class, ::searchAt)
+        initHandler(GroupMessageEvent::class, Dictionary::handle)
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
@@ -43,6 +45,8 @@ internal object PluginMain : KotlinPlugin(
     }
 
     private suspend fun searchAt(e: GroupMessageEvent) {
+        if (e.group.id !in FengshengConfig.qq.qqGroup)
+            return
         val messages = e.message.filter { it is At || it is PlainText }
         if (messages.size >= 2) {
             val content = messages[0] as? PlainText ?: return

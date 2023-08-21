@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
+import net.mamoe.mirai.console.data.ValueName
 import net.mamoe.mirai.console.data.value
 
 object FengshengConfig : AutoSavePluginConfig("FengshengConfig") {
@@ -30,4 +31,8 @@ object FengshengConfig : AutoSavePluginConfig("FengshengConfig") {
 
     fun isSuperAdmin(qq: Long) =
         qq == this.qq.superAdminQQ
+
+    @ValueDescription("图片超时时间（单位：小时）")
+    @ValueName("image_expire_hours")
+    val imageExpireHours: Long by value(72L)
 }
