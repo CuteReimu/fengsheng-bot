@@ -45,7 +45,7 @@ internal object PluginMain : KotlinPlugin(
 
     private suspend fun searchAt(e: GroupMessageEvent) {
         val messages = e.message.filter { it is At || it is PlainText }
-        if (messages.size > 2) {
+        if (messages.size >= 2) {
             val content = messages[0] as? PlainText ?: return
             if (content.content.trim() != "查询") return
             val at = messages[1] as? At ?: return
