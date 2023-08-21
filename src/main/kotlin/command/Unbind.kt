@@ -18,7 +18,11 @@ object Unbind : CommandHandler {
             return PlainText("命令格式：\n解绑 QQ号")
         }
         if (!PermData.playerMap.containsKey(id)) return PlainText("玩家没有绑定")
-        synchronized(PermData) { PermData.playerMap -= id }
+        synchronized(PermData) {
+            val name = PermData.playerMap[id] ?: return@synchronized
+            PermData.playerMap -= id
+            Bind.reversePlayerMap -= name
+        }
         return PlainText("解绑成功")
     }
 }
