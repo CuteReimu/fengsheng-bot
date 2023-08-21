@@ -2,7 +2,9 @@ package com.fengsheng.bot
 
 import com.fengsheng.bot.command.Bind
 import com.fengsheng.bot.storage.FengshengConfig
+import com.fengsheng.bot.storage.ImageCache
 import com.fengsheng.bot.storage.PermData
+import com.fengsheng.bot.storage.QunDb
 import com.fengsheng.bot.utils.HttpUtil
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -26,6 +28,8 @@ internal object PluginMain : KotlinPlugin(
     override fun onEnable() {
         FengshengConfig.reload()
         PermData.reload()
+        QunDb.reload()
+        ImageCache.reload()
         Bind.initReverseMap()
         Dictionary.removeTimeoutImages()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
