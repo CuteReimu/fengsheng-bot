@@ -64,7 +64,14 @@ object Dictionary {
                 val res = QunDb.data.keys.filter { key in it }.sorted()
                 if (res.isNotEmpty()) {
                     val res1 = res.withIndex().map { (i, v) -> "${i + 1}. $v" }
-                    e.group.sendMessage(res1.joinToString(separator = "\n", prefix = "搜索到以下词条：\n"))
+                    e.group.sendMessage(
+                        res1.joinToString(
+                            separator = "\n",
+                            prefix = "搜索到以下词条：\n",
+                            limit = 10,
+                            truncated = "等${res1.size}个词条"
+                        )
+                    )
                 } else {
                     e.group.sendMessage("搜索不到词条($key)")
                 }
