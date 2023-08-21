@@ -29,4 +29,11 @@ object PermData : AutoSavePluginData("PermData") {
 
     @ValueDescription("注册状态")
     var playerMap: Map<Long, String> by value(mapOf())
+
+    @ValueDescription("注册状态反查")
+    var reversePlayerMap: Map<String, Long> by value(mapOf())
+
+    fun initReverseMap() {
+        reversePlayerMap = playerMap.map { (k, v) -> v to k }.toMap()
+    }
 }
