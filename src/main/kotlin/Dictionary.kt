@@ -3,6 +3,7 @@ package com.fengsheng.bot
 import com.fengsheng.bot.storage.FengshengConfig
 import com.fengsheng.bot.storage.ImageCache
 import com.fengsheng.bot.storage.ImageCache.ImageData
+import com.fengsheng.bot.storage.PermData
 import com.fengsheng.bot.storage.QunDb
 import com.fengsheng.bot.utils.HttpUtil
 import net.mamoe.mirai.contact.Group
@@ -24,8 +25,9 @@ object Dictionary {
     suspend fun handle(e: GroupMessageEvent) {
         if (e.group.id !in FengshengConfig.qq.qqGroup)
             return
+        val perm = e.sender.id in PermData.dictModify
         val content = e.message.contentToString()
-        if (content.startsWith("添加词条 ")) {
+        if (perm && content.startsWith("添加词条 ")) {
             val key = content.substring(4).trim()
             if (CommandHandler.handlers.any { it.name == key }) {
                 e.group.sendMessage("不能用${key}作为词条")
@@ -38,7 +40,7 @@ object Dictionary {
                     addDbQQList[e.sender.id] = key to "添加词条成功"
                 }
             }
-        } else if (content.startsWith("修改词条 ")) {
+        } else if (perm && content.startsWith("修改词条 ")) {
             val key = content.substring(4).trim()
             if (key.isNotEmpty()) {
                 if (key !in QunDb.data) {
@@ -48,7 +50,7 @@ object Dictionary {
                     addDbQQList[e.sender.id] = key to "修改词条成功"
                 }
             }
-        } else if (content.startsWith("删除词条 ")) {
+        } else if (perm && content.startsWith("删除词条 ")) {
             val key = content.substring(4).trim()
             if (key.isNotEmpty()) {
                 if (key !in QunDb.data) {

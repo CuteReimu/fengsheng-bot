@@ -36,7 +36,7 @@ interface CommandHandler {
     companion object {
         val handlers = arrayOf(
             ShowTips,
-            AddAdmin, RemoveAdmin, ListAllAdmin,
+            AddAdmin, RemoveAdmin, ListAllAdmin, AddDictModify, RemoveDictModify,
             RandDice, Roll,
             GetScore, GetMyScore, RankList, ResetPwd, Bind, Unbind, Register, AtPlayer,
             ForbidRole, ReleaseRole, SetVersion, SetNotice,
