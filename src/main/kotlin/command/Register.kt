@@ -22,7 +22,10 @@ object Register : CommandHandler {
         val oldName = PermData.playerMap[msg.sender.id]
         if (oldName != null) return PlainText("你已经注册过：$oldName")
         if (!HttpUtil.register(name)) return PlainText("用户名重复")
-        synchronized(PermData) { PermData.playerMap += msg.sender.id to name }
+        synchronized(PermData) {
+            PermData.playerMap += msg.sender.id to name
+            Bind.reversePlayerMap += name to msg.sender.id
+        }
         return PlainText("注册成功")
     }
 }
