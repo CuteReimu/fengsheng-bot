@@ -1,10 +1,7 @@
 package com.fengsheng.bot
 
 import com.fengsheng.bot.command.Bind
-import com.fengsheng.bot.storage.FengshengConfig
-import com.fengsheng.bot.storage.ImageCache
-import com.fengsheng.bot.storage.PermData
-import com.fengsheng.bot.storage.QunDb
+import com.fengsheng.bot.storage.*
 import com.fengsheng.bot.utils.HttpUtil
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -12,7 +9,7 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
-import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.*
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.PlainText
@@ -30,11 +27,17 @@ internal object PluginMain : KotlinPlugin(
         PermData.reload()
         QunDb.reload()
         ImageCache.reload()
+        MuteCache.reload()
         Bind.initReverseMap()
         Dictionary.removeTimeoutImages()
+        MuteCache.clearExpiredData()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         initHandler(GroupMessageEvent::class, ::searchAt)
         initHandler(GroupMessageEvent::class, Dictionary::handle)
+        initHandler(BotOnlineEvent::class, MuteHandler::handleOnline)
+        initHandler(MemberMuteEvent::class, MuteHandler::handleMute)
+        initHandler(MemberUnmuteEvent::class, MuteHandler::handleUnmute)
+        initHandler(MemberJoinEvent::class, MuteHandler::handleJoinGroup)
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
