@@ -21,15 +21,21 @@ object MuteHandler {
     }
 
     fun handleMute(e: MemberMuteEvent) {
+        if (e.group.id !in FengshengConfig.qq.qqGroup)
+            return
         val now = System.currentTimeMillis()
         MuteCache.addMuteData(e.groupId, e.member.id, now + e.durationSeconds * 1000)
     }
 
     fun handleUnmute(e: MemberUnmuteEvent) {
+        if (e.group.id !in FengshengConfig.qq.qqGroup)
+            return
         MuteCache.removeMuteData(e.groupId, e.member.id)
     }
 
     suspend fun handleJoinGroup(e: MemberJoinEvent) {
+        if (e.group.id !in FengshengConfig.qq.qqGroup)
+            return
         val groupData = MuteCache.data[e.groupId] ?: return
         val muteEndTimestamp = groupData[e.member.id] ?: return
         val muteMinutesRemaining = (muteEndTimestamp - System.currentTimeMillis()) / 1000 / 60
