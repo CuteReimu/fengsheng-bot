@@ -55,10 +55,10 @@ interface CommandHandler {
                 if (isAt) (message.getOrNull(2) as? PlainText)?.content?.trim()
                 else (message.getOrNull(1) as? PlainText)?.content?.trim()
             val msgContent = if (!msg.isNullOrEmpty()) msg else if (isAt) ShowTips.name else return
-            if (msgContent.contains("\n") || msgContent.contains("\r"))
-                return
             val msgSlices = msgContent.split(" ", limit = 2)
             val cmd = msgSlices[0]
+            if (cmd == SetNotice.name && (msgContent.contains("\n") || msgContent.contains("\r")))
+                return
             val content = msgSlices.getOrElse(1) { "" }
             handlers.forEach {
                 if (it.name == cmd && it.checkAuth(e.group.id, e.sender.id)) {
