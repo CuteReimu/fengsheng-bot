@@ -5,6 +5,7 @@ import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.InputStream
+import java.net.URLEncoder
 import java.time.Duration
 
 object HttpUtil {
@@ -16,28 +17,28 @@ object HttpUtil {
     }
 
     fun getScore(name: String): String {
-        val result = get("${FengshengConfig.fengshengUrl}/getscore?name=$name")
+        val result = get("${FengshengConfig.fengshengUrl}/getscore?name=${URLEncoder.encode(name, Charsets.UTF_8)}")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
         return jsonObject["result"]!!.jsonPrimitive.content
     }
 
     fun resetPwd(name: String): String {
-        val result = get("${FengshengConfig.fengshengUrl}/resetpwd?name=$name")
+        val result = get("${FengshengConfig.fengshengUrl}/resetpwd?name=${URLEncoder.encode(name, Charsets.UTF_8)}")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
         return jsonObject["result"]!!.jsonPrimitive.content
     }
 
     fun forbidRole(name: String): Boolean {
-        val result = get("${FengshengConfig.fengshengUrl}/forbidrole?name=$name")
+        val result = get("${FengshengConfig.fengshengUrl}/forbidrole?name=${URLEncoder.encode(name, Charsets.UTF_8)}")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
         return jsonObject["result"]!!.jsonPrimitive.boolean
     }
 
     fun releaseRole(name: String): Boolean {
-        val result = get("${FengshengConfig.fengshengUrl}/releaserole?name=$name")
+        val result = get("${FengshengConfig.fengshengUrl}/releaserole?name=${URLEncoder.encode(name, Charsets.UTF_8)}")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
         return jsonObject["result"]!!.jsonPrimitive.boolean
@@ -50,13 +51,14 @@ object HttpUtil {
     }
 
     fun setNotice(notice: String) {
-        val result = get("${FengshengConfig.fengshengUrl}/setnotice?notice=$notice")
+        val result =
+            get("${FengshengConfig.fengshengUrl}/setnotice?notice=${URLEncoder.encode(notice, Charsets.UTF_8)}")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
     }
 
     fun register(name: String): Boolean {
-        val result = get("${FengshengConfig.fengshengUrl}/register?name=$name")
+        val result = get("${FengshengConfig.fengshengUrl}/register?name=${URLEncoder.encode(name, Charsets.UTF_8)}")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
         return jsonObject["result"]!!.jsonPrimitive.boolean
