@@ -57,7 +57,7 @@ interface CommandHandler {
             val msgContent = if (!msg.isNullOrEmpty()) msg else if (isAt) ShowTips.name else return
             val msgSlices = msgContent.split(" ", limit = 2)
             val cmd = msgSlices[0]
-            if (cmd == SetNotice.name && (msgContent.contains("\n") || msgContent.contains("\r")))
+            if (cmd != SetNotice.name && (msgContent.contains("\n") || msgContent.contains("\r")))
                 return
             val content = msgSlices.getOrElse(1) { "" }
             handlers.forEach {
