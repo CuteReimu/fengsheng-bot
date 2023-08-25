@@ -40,6 +40,7 @@ interface CommandHandler {
             RandDice, Roll,
             GetScore, GetMyScore, RankList, ResetPwd, Bind, Unbind, Register, AtPlayer,
             ForbidRole, ReleaseRole, SetVersion, SetNotice,
+            AddNotifyOnStart, AddNotifyOnEnd,
         )
 
         suspend fun handle(e: GroupMessageEvent) {

@@ -64,6 +64,13 @@ object HttpUtil {
         return jsonObject["result"]!!.jsonPrimitive.boolean
     }
 
+    fun addNotify(qq: Long, isEnd: Boolean): Boolean {
+        val result = get("${FengshengConfig.fengshengUrl}/register?qq=$qq${if (isEnd) "&when=1" else ""}")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.boolean
+    }
+
     fun getPic(url: String): InputStream {
         val request = Request.Builder().url(url)
             .header("Content-Type", "application/x-www-form-urlencoded")
