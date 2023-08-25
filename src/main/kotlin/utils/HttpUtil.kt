@@ -65,7 +65,7 @@ object HttpUtil {
     }
 
     fun addNotify(qq: Long, isEnd: Boolean): Boolean {
-        val result = get("${FengshengConfig.fengshengUrl}/register?qq=$qq${if (isEnd) "&when=1" else ""}")
+        val result = get("${FengshengConfig.fengshengUrl}/addnotify?qq=$qq${if (isEnd) "&when=1" else ""}")
         val jsonObject = result.jsonObject
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
         return jsonObject["result"]!!.jsonPrimitive.boolean

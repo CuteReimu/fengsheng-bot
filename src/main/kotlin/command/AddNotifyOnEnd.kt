@@ -14,7 +14,7 @@ object AddNotifyOnEnd : CommandHandler {
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
-        return if (HttpUtil.addNotify(msg.sender.id, true)) PlainText("好的，结束喊我")
+        return if (HttpUtil.addNotify(msg.sender.id, true)) PlainText("好的，结束喊你")
         else PlainText("太多人预约了，不能再添加了")
     }
 }
