@@ -71,6 +71,19 @@ object HttpUtil {
         return jsonObject["result"]!!.jsonPrimitive.boolean
     }
 
+    fun setWaitSecond(second: Int): Boolean {
+        val result = get("${FengshengConfig.fengshengUrl}/updatewaitsecond?second=$second")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.boolean
+    }
+
+    fun forceEnd() {
+        val result = get("${FengshengConfig.fengshengUrl}/forceend")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+    }
+
     fun getPic(url: String): InputStream {
         val request = Request.Builder().url(url)
             .header("Content-Type", "application/x-www-form-urlencoded")
