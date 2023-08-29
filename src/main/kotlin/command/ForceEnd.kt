@@ -14,7 +14,8 @@ object ForceEnd : CommandHandler {
 
     override fun checkAuth(groupCode: Long, senderId: Long) = PermData.isAdmin(senderId)
 
-    override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
+    override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
+        content.isBlank() || return null
         HttpUtil.forceEnd()
         return PlainText("已执行")
     }

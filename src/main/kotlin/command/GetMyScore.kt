@@ -17,7 +17,7 @@ object GetMyScore : CommandHandler {
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
-        if (content.isNotBlank()) return null
+        content.isBlank() || return null
         val name = PermData.playerMap[msg.sender.id] ?: return PlainText("请先绑定")
         return PlainText(HttpUtil.getScore(name))
     }
