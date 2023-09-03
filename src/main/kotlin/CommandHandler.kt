@@ -41,6 +41,7 @@ interface CommandHandler {
             GetScore, GetMyScore, RankList, ResetPwd, Bind, Unbind, Register, AtPlayer,
             ForbidRole, ReleaseRole, SetVersion, SetNotice, SetWaitSecond, ForceEnd,
             AddNotifyOnStart, AddNotifyOnEnd,
+            ForbidPlayer, ReleasePlayer,
         )
 
         suspend fun handle(e: GroupMessageEvent) {

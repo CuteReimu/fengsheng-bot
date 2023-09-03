@@ -44,6 +44,22 @@ object HttpUtil {
         return jsonObject["result"]!!.jsonPrimitive.boolean
     }
 
+    fun forbidPlayer(name: String, hours: Int): String {
+        val uName = URLEncoder.encode(name, Charsets.UTF_8)
+        val result = get("${FengshengConfig.fengshengUrl}/forbidplayer?name=${uName}&hour=$hours")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.content
+    }
+
+    fun releasePlayer(name: String): String {
+        val uName = URLEncoder.encode(name, Charsets.UTF_8)
+        val result = get("${FengshengConfig.fengshengUrl}/releaseplayer?name=$uName")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.content
+    }
+
     fun setVersion(version: Int) {
         val result = get("${FengshengConfig.fengshengUrl}/setversion?version=$version")
         val jsonObject = result.jsonObject
