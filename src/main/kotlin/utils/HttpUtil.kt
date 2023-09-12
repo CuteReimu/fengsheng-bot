@@ -113,6 +113,13 @@ object HttpUtil {
         return resp.body!!.byteStream()
     }
 
+    fun updateTitle(name: String, title: String): Boolean {
+        val result = get("${FengshengConfig.fengshengUrl}/updatetitle?name=${name}&title=$title")
+        val jsonObject = result.jsonObject
+        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
+        return jsonObject["result"]!!.jsonPrimitive.boolean
+    }
+
     fun getPic(url: String): InputStream {
         val request = Request.Builder().url(url)
             .header("Content-Type", "application/x-www-form-urlencoded")
