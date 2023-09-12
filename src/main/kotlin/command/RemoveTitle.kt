@@ -12,7 +12,7 @@ object RemoveTitle : CommandHandler {
     override val name = "删除称号"
 
     override fun showTips(groupCode: Long, senderId: Long) =
-        if (!PermData.playerMap.containsKey(senderId)) "删除称号"
+        if (PermData.playerMap.containsKey(senderId)) "删除称号"
         else null
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true

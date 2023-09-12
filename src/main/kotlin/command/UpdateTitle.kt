@@ -12,7 +12,7 @@ object UpdateTitle : CommandHandler {
     override val name = "修改称号"
 
     override fun showTips(groupCode: Long, senderId: Long) =
-        if (!PermData.playerMap.containsKey(senderId)) "修改称号 称号"
+        if (PermData.playerMap.containsKey(senderId)) "修改称号 称号"
         else null
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
