@@ -100,14 +100,29 @@ object HttpUtil {
         jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
     }
 
+    fun winRate(): InputStream {
+        val request = Request.Builder().url("${FengshengConfig.fengshengUrl}/winrate")
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header("user-agent", ua)
+            .get().build()
+        val resp = client.newCall(request).execute()
+        if (resp.code != 200) {
+            resp.close()
+            throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
+        }
+        return resp.body!!.byteStream()
+    }
+
     fun getPic(url: String): InputStream {
         val request = Request.Builder().url(url)
             .header("Content-Type", "application/x-www-form-urlencoded")
             .header("user-agent", ua)
             .get().build()
         val resp = client.newCall(request).execute()
-        if (resp.code != 200)
+        if (resp.code != 200) {
+            resp.close()
             throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
+        }
         return resp.body!!.byteStream()
     }
 
