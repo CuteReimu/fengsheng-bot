@@ -82,11 +82,10 @@ internal object PluginMain : KotlinPlugin(
             override fun run() {
                 val now = System.currentTimeMillis() / 1000
                 bot.groups.forEach { group ->
-                    if (group.id !in FengshengConfig.qq.qqGroup)
-                        return@forEach
-                    if (group.botAsMember.permission < MemberPermission.ADMINISTRATOR)
-                        return@forEach
+                    group.id in FengshengConfig.qq.qqGroup || return@forEach
+                    group.botAsMember.permission >= MemberPermission.ADMINISTRATOR || return@forEach
                     for (member in group.members) {
+                        member.id != 2854196310 || continue // 排除Q群管家
                         member as? NormalMember ?: continue
                         val join = (now - member.joinTimestamp) / 3600
                         join >= 72 || continue
