@@ -9,7 +9,6 @@ import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.contact.MemberPermission
-import net.mamoe.mirai.contact.NormalMember
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
 import net.mamoe.mirai.event.events.*
@@ -86,7 +85,7 @@ internal object PluginMain : KotlinPlugin(
                     group.botAsMember.permission >= MemberPermission.ADMINISTRATOR || return@forEach
                     for (member in group.members) {
                         member.id != 2854196310 || continue // 排除Q群管家
-                        member as? NormalMember ?: continue
+                        member.permission < MemberPermission.ADMINISTRATOR || continue
                         val join = (now - member.joinTimestamp) / 3600
                         join >= 72 || continue
                         !PermData.playerMap.containsKey(member.id) || continue
