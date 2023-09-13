@@ -5,14 +5,18 @@ import com.fengsheng.bot.storage.*
 import com.fengsheng.bot.utils.HttpUtil
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.contact.MemberPermission
+import net.mamoe.mirai.contact.NormalMember
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
 import net.mamoe.mirai.event.events.*
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.PlainText
+import java.util.*
 import kotlin.reflect.KClass
 
 internal object PluginMain : KotlinPlugin(
@@ -38,6 +42,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(MemberMuteEvent::class, MuteHandler::handleMute)
         initHandler(MemberUnmuteEvent::class, MuteHandler::handleUnmute)
         initHandler(MemberJoinEvent::class, MuteHandler::handleJoinGroup)
+        initHandler(BotOnlineEvent::class, ::checkUnregisteredMember)
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
@@ -69,5 +74,33 @@ internal object PluginMain : KotlinPlugin(
             val name = PermData.playerMap[at.target]
             e.group.sendMessage(if (name == null) "该玩家还未绑定" else HttpUtil.getScore(name))
         }
+    }
+
+    private suspend fun checkUnregisteredMember(e: BotOnlineEvent) {
+        val bot = e.bot
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                val now = System.currentTimeMillis() / 1000
+                bot.groups.forEach { group ->
+                    if (group.id !in FengshengConfig.qq.qqGroup)
+                        return@forEach
+                    if (group.botAsMember.permission < MemberPermission.ADMINISTRATOR)
+                        return@forEach
+                    for (member in group.members) {
+                        member as? NormalMember ?: continue
+                        val join = (now - member.joinTimestamp) / 3600
+                        join >= 72 || continue
+                        !PermData.playerMap.containsKey(member.id) || continue
+                        val speak = (now - member.lastSpeakTimestamp) / 3600
+                        if (member.lastSpeakTimestamp == 0 || speak >= 7 * 24) {
+                            runBlocking {
+                                member.kick("")
+                            }
+                            return
+                        }
+                    }
+                }
+            }
+        }, 30000, 3600000)
     }
 }
