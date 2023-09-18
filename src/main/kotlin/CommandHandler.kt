@@ -42,6 +42,7 @@ interface CommandHandler {
             ForbidRole, ReleaseRole, SetVersion, SetNotice, SetWaitSecond, ForceEnd,
             AddNotifyOnStart, AddNotifyOnEnd,
             ForbidPlayer, ReleasePlayer, WinRate, UpdateTitle, RemoveTitle,
+            AddDict, RemoveDict, UpdateDict, SearchDict,
         )
 
         suspend fun handle(e: GroupMessageEvent) {
