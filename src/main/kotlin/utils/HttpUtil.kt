@@ -9,11 +9,17 @@ import java.net.URLEncoder
 import java.time.Duration
 
 object HttpUtil {
-    fun rankList(): String {
-        val result = get("${FengshengConfig.fengshengUrl}/ranklist")
-        val jsonObject = result.jsonObject
-        jsonObject["error"]?.let { throw Exception(it.jsonPrimitive.content) }
-        return jsonObject["result"]!!.jsonPrimitive.content
+    fun rankList(): InputStream {
+        val request = Request.Builder().url("${FengshengConfig.fengshengUrl}/ranklist")
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header("user-agent", ua)
+            .get().build()
+        val resp = client.newCall(request).execute()
+        if (resp.code != 200) {
+            resp.close()
+            throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
+        }
+        return resp.body!!.byteStream()
     }
 
     fun getScore(name: String): String {
