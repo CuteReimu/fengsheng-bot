@@ -127,7 +127,7 @@ object Dictionary {
                             val buf = file.readBytes()
                             val image = buf.toExternalResource().use { group.uploadImage(it) }
                             File("dictionary-images").apply { if (!exists()) mkdirs() }
-                            File("dictionary-images${File.separatorChar}${m.imageId}").writeBytes(buf)
+                            File("dictionary-images${File.separatorChar}${image.imageId}").writeBytes(buf)
                             ImageCache.data += image.imageId to ImageData(now)
                             return@map image
                         }
