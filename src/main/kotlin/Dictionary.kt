@@ -141,12 +141,19 @@ object Dictionary {
 
     fun removeTimeoutImages() {
         val files = File("dictionary-images").list() ?: return
-        val fileSet = files.toMutableSet()
+        val deleteFileSet = files.toMutableSet()
+        val remainFileSet = HashSet<String>()
         QunDb.data.forEach { (_, v) ->
             val message = MessageChain.deserializeFromJsonString(v)
-            message.forEach { m -> (m as? Image)?.imageId?.also { fileSet -= it } }
+            message.forEach { m ->
+                (m as? Image)?.imageId?.also {
+                    deleteFileSet -= it
+                    remainFileSet += it
+                }
+            }
         }
-        fileSet.forEach { File("dictionary-images${File.separatorChar}$it").delete() }
+        deleteFileSet.forEach { File("dictionary-images${File.separatorChar}$it").delete() }
+        ImageCache.data = ImageCache.data.filter { (imageId, _) -> imageId in remainFileSet }
     }
 
     private val logger: MiraiLogger by lazy {

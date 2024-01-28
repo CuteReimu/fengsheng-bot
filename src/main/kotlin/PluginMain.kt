@@ -32,7 +32,13 @@ internal object PluginMain : KotlinPlugin(
         ImageCache.reload()
         MuteCache.reload()
         Bind.initReverseMap()
-        Dictionary.removeTimeoutImages()
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                launch {
+                    Dictionary.removeTimeoutImages()
+                }
+            }
+        }, 0, 24 * 60 * 60 * 1000)
         MuteCache.clearExpiredData()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         initHandler(GroupMessageEvent::class, ::searchAt)
