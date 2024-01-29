@@ -27,7 +27,13 @@ object Dictionary {
             return
         val perm = e.sender.id in PermData.dictModify
         val content = e.message.contentToString()
-        if (perm && content.startsWith("添加词条 ")) {
+        if (perm && content == "查看过期词条") {
+            val keys = QunDb.data.filter { (_, value) ->
+                containsExpiredImage(MessageChain.deserializeFromJsonString(value))
+            }.keys
+            if (keys.isNotEmpty()) e.group.sendMessage(keys.joinToString(separator = "\n"))
+            else e.group.sendMessage("没有过期词条")
+        } else if (perm && content.startsWith("添加词条 ")) {
             val key = content.substring(4).trim()
             if (CommandHandler.handlers.any { it.name == key }) {
                 e.group.sendMessage("不能用${key}作为词条")
@@ -110,6 +116,11 @@ object Dictionary {
                 }
             }
         }
+    }
+
+    private fun containsExpiredImage(mc: MessageChain): Boolean = mc.any {
+        it is Image && !(File("dictionary-images").exists() &&
+                File("dictionary-images${File.separatorChar}${it.imageId}").exists())
     }
 
     private suspend fun ensureImage(group: Group, ms: MessageChain): MessageChain {
