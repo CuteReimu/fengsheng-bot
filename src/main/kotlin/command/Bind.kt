@@ -17,27 +17,22 @@ object Bind : CommandHandler {
 
     override val name = "绑定"
 
-    override fun showTips(groupCode: Long, senderId: Long) =
-        if (!PermData.playerMap.containsKey(senderId)) "绑定 名字"
-        else if (PermData.isAdmin(senderId)) "绑定 QQ号 名字"
-        else null
+    override fun showTips(groupCode: Long, senderId: Long) = "绑定 QQ号 名字"
 
-    override fun checkAuth(groupCode: Long, senderId: Long) = true
+    override fun checkAuth(groupCode: Long, senderId: Long) = PermData.isAdmin(senderId)
 
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
         var name = content.trim()
-        var id = msg.sender.id
-        if (PermData.isAdmin(id)) {
-            val arr = name.split(" ", limit = 2)
-            if (arr.size == 2) {
-                runCatching {
-                    id = arr[0].toLong()
-                    name = arr[1].trim()
-                    if (id !in msg.group) return PlainText("${id}不在群里")
-                }
-            }
+        val arr = name.split(" ", limit = 2)
+        if (arr.size != 2) return PlainText("命令格式：\n绑定 QQ号 名字")
+        val id = try {
+            arr[0].toLong()
+        } catch (e: Exception) {
+            return PlainText("命令格式：\n绑定 QQ号 名字")
         }
-        if (name.isEmpty()) return PlainText("命令格式：\n绑定 名字")
+        if (id !in msg.group) return PlainText("${id}不在群里")
+        name = arr[1].trim()
+        if (name.isEmpty()) return PlainText("命令格式：\n绑定 QQ号 名字")
         if (PermData.playerMap.containsKey(id)) return PlainText("不能重复绑定")
         val oldId = reversePlayerMap[name]
         if (oldId != null)
