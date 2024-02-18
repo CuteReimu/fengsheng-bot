@@ -38,7 +38,7 @@ interface CommandHandler {
             ShowTips,
             AddAdmin, RemoveAdmin, ListAllAdmin, AddDictModify, RemoveDictModify,
             RandDice, Roll,
-            GetScore, GetMyScore, RankList, ResetPwd, Bind, Unbind, Register, AtPlayer,
+            GetScore, GetMyScore, RankList, ResetPwd, Bind, Unbind, UnbindExpired, Register, AtPlayer,
             ForbidRole, ReleaseRole, SetVersion, SetNotice, SetWaitSecond, ForceEnd,
             AddNotifyOnStart, AddNotifyOnEnd,
             ForbidPlayer, ReleasePlayer, WinRate, UpdateTitle, RemoveTitle,
