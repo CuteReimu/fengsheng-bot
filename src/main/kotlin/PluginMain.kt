@@ -32,6 +32,7 @@ internal object PluginMain : KotlinPlugin(
         ImageCache.reload()
         MuteCache.reload()
         Bind.initReverseMap()
+        QunDb.data = QunDb.data.mapKeys { it.key.lowercase() }
         Timer().schedule(object : TimerTask() {
             override fun run() {
                 launch {

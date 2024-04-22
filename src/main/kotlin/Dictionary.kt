@@ -34,7 +34,7 @@ object Dictionary {
             if (keys.isNotEmpty()) e.group.sendMessage(keys.joinToString(separator = "\n"))
             else e.group.sendMessage("没有过期词条")
         } else if (perm && content.startsWith("添加词条 ")) {
-            val key = content.substring(4).trim()
+            val key = content.substring(4).trim().lowercase()
             if (CommandHandler.handlers.any { it.name == key }) {
                 e.group.sendMessage("不能用${key}作为词条")
             }
@@ -47,7 +47,7 @@ object Dictionary {
                 }
             }
         } else if (perm && content.startsWith("修改词条 ")) {
-            val key = content.substring(4).trim()
+            val key = content.substring(4).trim().lowercase()
             if (key.isNotEmpty()) {
                 if (key !in QunDb.data) {
                     e.group.sendMessage("词条不存在")
@@ -57,7 +57,7 @@ object Dictionary {
                 }
             }
         } else if (perm && content.startsWith("删除词条 ")) {
-            val key = content.substring(4).trim()
+            val key = content.substring(4).trim().lowercase()
             if (key.isNotEmpty()) {
                 if (key !in QunDb.data) {
                     e.group.sendMessage("词条不存在")
@@ -67,7 +67,7 @@ object Dictionary {
                 }
             }
         } else if (content.startsWith("查询词条 ") || content.startsWith("搜索词条 ")) {
-            val key = content.substring(4).trim()
+            val key = content.substring(4).trim().lowercase()
             if (key.isNotEmpty()) {
                 val res = QunDb.data.keys.filter { key in it }.sorted()
                 if (res.isNotEmpty()) {
@@ -92,7 +92,7 @@ object Dictionary {
                 saveImage(message2)
                 e.group.sendMessage(lastKey.second)
             } else { // 调用词条
-                val value = QunDb.data[content]
+                val value = QunDb.data[content.lowercase()]
                 if (value != null) {
                     val mc1 = MessageChain.deserializeFromJsonString(value)
                     val mc2 = ensureImage(e.group, mc1)
