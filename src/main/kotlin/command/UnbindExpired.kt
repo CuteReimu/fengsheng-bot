@@ -18,8 +18,7 @@ object UnbindExpired : CommandHandler {
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
         content.isBlank() || return null
         for (name in PermData.playerMap.values.toList()) {
-            val s = HttpUtil.getScore(name)
-            if ("·0，总场次：0，" in s || s.endsWith("已身死道消")) {
+            if (HttpUtil.getScore(name).endsWith("已身死道消")) {
                 val id = Bind.reversePlayerMap[name] ?: continue
                 synchronized(PermData) {
                     PermData.playerMap -= id
